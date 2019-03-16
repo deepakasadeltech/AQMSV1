@@ -75,7 +75,9 @@ Route::group(['middleware' => 'install'], function() {
         Route::group(['prefix' => 'reports', 'as' => 'reports::'], function() {
             // User Report
             Route::get('user', ['as' => 'user', 'uses' => 'UserReportController@index']);
-            Route::get('user/{user}/{date}', ['as' => 'user_show', 'uses' => 'UserReportController@show']);
+            Route::get('user/{user}/{sdate}/{edate}', ['as' => 'user_show', 'uses' => 'UserReportController@show']);
+            Route::get('user/{asdate}/{aedate}', ['as' => 'doctor_show', 'uses' => 'UserReportController@showrecord']);
+           
 
             // Queue list
             Route::get('queuelist/{date}', ['as' => 'queue_list', 'uses' => 'QueueListReportController@index']);

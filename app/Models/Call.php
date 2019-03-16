@@ -32,4 +32,11 @@ class Call extends Model
 	{
 		return $this->belongsTo('App\Models\User');
 	}
+
+	public function doctorreport()
+	{
+		return $this->belongsTo('App\Models\DoctorReport');
+	}
+
+
 }

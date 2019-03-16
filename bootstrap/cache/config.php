@@ -3,7 +3,7 @@
   array (
     'name' => 'ASADELTECH',
     'env' => 'production',
-    'debug' => false,
+    'debug' => true,
     'url' => 'http://localhost/aqmsv1si',
     'timezone' => 'Asia/Calcutta',
     'locale' => 'gb',

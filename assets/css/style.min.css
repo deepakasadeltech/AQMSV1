@@ -663,6 +663,14 @@ span.selkeyboard input.select-dropdown{overflow:hidden;height:32px;border-bottom
 td.disabled{background-color:#DFDFDF!important;box-shadow:none;color:#9F9F9F!important;cursor:not-allowed}
 td.enabled{cursor:default}
 
+ul.ttissuedetails{list-style: none; margin: 0px; padding: 0px;}
+ul.ttissuedetails li{display:inline-block; font-size: 12px; margin: 0px 2px; line-height: normal;}
+ul.ttissuedetails li span{font-size: 1.8rem; margin: 0px; line-height: normal;}
+table.tablemodify thead th, table.tablemodify tbody td{text-align: center;}
+table.tablemodify thead th:first-child{width:10px;}
+table.tablemodify thead th{width:12%}
+
+
 @media only screen and (max-width:1024px) {
     .textlogo, li.datetimeglobal span, .truncate{font-size: 12px !important;}
     .doctordetails span{font-size: 10px;}

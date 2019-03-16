@@ -52,67 +52,70 @@
 
 @section('script')
     <script>
-        $(function() {
-            from_$input = $('#sdate').pickadate({
+     //---------------date-with-user-----------------------------------        
+var from_$input1 = $('#sdate').pickadate({
                 selectMonths: true,
                 selectYears: 15,
                 format: 'dd-mm-yyyy',
                 clear: false,
-                // onSet: function(ele) {
-                //     if(ele.select) {
-                //         this.close();
-                //     }
-                // },
+                onSet: function(ele) {
+                    if(ele.select) {
+                        this.close();
+                    }
+                },
                 closeOnSelect: true,
                 onClose: function() {
                     document.activeElement.blur();
-                }
-            });
+                }}),
+    from_picker1 = from_$input1.pickadate('picker')
 
-            to_$input = $('#edate').pickadate({
+var to_$input1 = $('#edate').pickadate({
                 selectMonths: true,
                 selectYears: 15,
                 format: 'dd-mm-yyyy',
                 clear: false,
-                // onSet: function(ele) {
-                //     if(ele.select) {
-                //         this.close();
-                //     }
-                // },
+                onSet: function(ele) {
+                    if(ele.select) {
+                        this.close();
+                    }
+                },
                 closeOnSelect: true,
                 onClose: function() {
                     document.activeElement.blur();
-                }
-            });
+                }}),
+    to_picker1 = to_$input1.pickadate('picker')
 
-            from_picker = from_$input.pickadate('picker');
-            to_picker = to_$input.pickadate('picker');
 
-            if (from_picker.get('value')) {
-                to_picker.set('min', from_picker.get('select'));
-            }
-            if (to_picker.get('value')) {
-                from_picker.set('max', to_picker.get('select'));
-            }
+// Check if there’s a “from” or “to” date to start with.
+if ( from_picker1.get('value') ) {
+  to_picker1.set('min', from_picker1.get('select'))
+}
+if ( to_picker1.get('value') ) {
+  from_picker1.set('max', to_picker1.get('select'))
+}
 
-            from_picker.on('set', function(event) {
-                if (event.select ) {
-                    to_picker.set('min', from_picker.get('select'));
-                }
-                else if ('clear' in event ) {
-                    to_picker.set('min', false);
-                }
-            });
-            to_picker.on('set', function(event) {
-                if (event.select ) {
-                    from_picker.set('max', to_picker.get('select'));
-                }
-                else if ( 'clear' in event ) {
-                    from_picker.set('max', false);
-                }
-            });
-        });
+// When something is selected, update the “from” and “to” limits.
+from_picker1.on('set', function(event) {
+  if ( event.select ) {
+    to_picker1.set('min', from_picker1.get('select'))    
+  }
+  else if ( 'clear' in event ) {
+    to_picker1.set('min', false)
+  }
+})
+to_picker1.on('set', function(event) {
+  if ( event.select ) {
+    from_picker1.set('max', to_picker1.get('select'))
+  }
+  else if ( 'clear' in event ) {
+    from_picker1.set('max', false)
+  }
+})
+//----------------------------------
 
+
+       
+//------------------------------------------------------------
         $('#sdate, #edate, #department').change(function(event){
             var sdate = $('#sdate').val();
             var edate = $('#edate').val();

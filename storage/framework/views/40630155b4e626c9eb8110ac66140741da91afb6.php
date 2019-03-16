@@ -37,6 +37,7 @@
                     <div class="collapsible-body">
                         <ul>
                             <li<?php echo Request::is('reports/user*') ? ' class="active"' : ''; ?>><a href="<?php echo e(route('reports::user')); ?>" class="truncate"> <?php echo e(trans('messages.mainapp.menu.reports.user_report')); ?></a></li>
+
                             <li<?php echo Request::is('reports/queuelist*') ? ' class="active"' : ''; ?>><a href="<?php echo e(route('reports::queue_list', ['date' => \Carbon\Carbon::now()->format('d-m-Y')])); ?>" class="truncate"> <?php echo e(trans('messages.mainapp.menu.reports.queue_list')); ?></a></li>
                             <li<?php echo Request::is('reports/monthly*') ? ' class="active"' : ''; ?>><a href="<?php echo e(route('reports::monthly')); ?>" class="truncate"> <?php echo e(trans('messages.mainapp.menu.reports.monthly')); ?></a></li>
                             <li<?php echo Request::is('reports/statistical*') ? ' class="active"' : ''; ?>><a href="<?php echo e(route('reports::statistical')); ?>" class="truncate"> <?php echo e(trans('messages.mainapp.menu.reports.statistical')); ?></a></li>

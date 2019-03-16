@@ -39,6 +39,7 @@
                     <div class="collapsible-body">
                         <ul>
                             <li{!! Request::is('reports/user*') ? ' class="active"' : '' !!}><a href="{{ route('reports::user') }}" class="truncate"> {{ trans('messages.mainapp.menu.reports.user_report') }}</a></li>
+
                             <li{!! Request::is('reports/queuelist*') ? ' class="active"' : '' !!}><a href="{{ route('reports::queue_list', ['date' => \Carbon\Carbon::now()->format('d-m-Y')]) }}" class="truncate"> {{ trans('messages.mainapp.menu.reports.queue_list') }}</a></li>
                             <li{!! Request::is('reports/monthly*') ? ' class="active"' : '' !!}><a href="{{ route('reports::monthly') }}" class="truncate"> {{ trans('messages.mainapp.menu.reports.monthly') }}</a></li>
                             <li{!! Request::is('reports/statistical*') ? ' class="active"' : '' !!}><a href="{{ route('reports::statistical') }}" class="truncate"> {{ trans('messages.mainapp.menu.reports.statistical') }}</a></li>

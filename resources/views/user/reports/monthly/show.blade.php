@@ -100,8 +100,8 @@
 @section('script')
     <script type="text/javascript" src="{{ asset('assets/js/plugins/data-tables/js/jquery.dataTables.min.js') }}"></script>
     <script>
-        $(function() {
-            $('.date').pickadate({
+        //---------------date-with-user-----------------------------------        
+var from_$input1 = $('#sdate').pickadate({
                 selectMonths: true,
                 selectYears: 15,
                 format: 'dd-mm-yyyy',
@@ -114,15 +114,63 @@
                 closeOnSelect: true,
                 onClose: function() {
                     document.activeElement.blur();
-                }
-            });
-            $('#report-table').DataTable({
-                "oLanguage": {
-                    "sLengthMenu": "Show _MENU_",
-                    "sSearch": "Search"
-                }
-            });
-        });
+                }}),
+    from_picker1 = from_$input1.pickadate('picker')
+
+var to_$input1 = $('#edate').pickadate({
+                selectMonths: true,
+                selectYears: 15,
+                format: 'dd-mm-yyyy',
+                clear: false,
+                onSet: function(ele) {
+                    if(ele.select) {
+                        this.close();
+                    }
+                },
+                closeOnSelect: true,
+                onClose: function() {
+                    document.activeElement.blur();
+                }}),
+    to_picker1 = to_$input1.pickadate('picker')
+
+
+// Check if there’s a “from” or “to” date to start with.
+if ( from_picker1.get('value') ) {
+  to_picker1.set('min', from_picker1.get('select'))
+}
+if ( to_picker1.get('value') ) {
+  from_picker1.set('max', to_picker1.get('select'))
+}
+
+// When something is selected, update the “from” and “to” limits.
+from_picker1.on('set', function(event) {
+  if ( event.select ) {
+    to_picker1.set('min', from_picker1.get('select'))    
+  }
+  else if ( 'clear' in event ) {
+    to_picker1.set('min', false)
+  }
+})
+to_picker1.on('set', function(event) {
+  if ( event.select ) {
+    from_picker1.set('max', to_picker1.get('select'))
+  }
+  else if ( 'clear' in event ) {
+    from_picker1.set('max', false)
+  }
+})
+//----------------------------------
+
+$(function() {
+           
+           $('#report-table').DataTable({
+               "oLanguage": {
+                   "sLengthMenu": "Show _MENU_",
+                   "sSearch": "Search",
+                   },
+           });
+       });
+//----------------------------------
 
         $('#sdate, #edate, #department').change(function(event){
             var sdate = $('#sdate').val();

@@ -28,6 +28,11 @@ class User extends Authenticatable
 		return $this->hasMany('App\Models\Call');
 	}
 
+	public function doctorreports()
+	{
+		return $this->hasMany('App\Models\DoctorReport');
+	}
+
 	public function getRoleTextAttribute($value)
 	{
 		if($this->attributes['role']=='A') {
@@ -72,6 +77,16 @@ class User extends Authenticatable
     public function counter()
 	{
 		return $this->belongsTo('App\Models\Counter');
+	}
+
+	public function call()
+	{
+		return $this->belongsTo('App\Models\Call');
+	}
+
+	public function doctorreport()
+	{
+		return $this->belongsTo('App\Models\DoctorReport');
 	}
 
 

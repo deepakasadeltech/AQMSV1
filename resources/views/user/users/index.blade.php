@@ -26,8 +26,10 @@
             <div class="col s12">
                 <div class="card-panel" style="float:left;width:100%;">
                 
-         <div class="queuetokenbox">  
+         <div class="queuetokenbox"> 
+         @if($user->role=='A') 
                     <a style="float:left" class="btn-floating waves-effect waves-light tooltipped" href="{{ route('users.create') }}" data-position="top" data-tooltip="{{ trans('messages.add') }} {{ trans('messages.mainapp.menu.users') }}"><i class="mdi-content-add left"></i></a>
+         @endif           
                     
     
        <ul id="tabs-swipe-demo" class="tabs">    
@@ -68,11 +70,15 @@
                                     {
                                         echo  $userdoctordetail->counter->name;
                                     ?>
+                                    @if($user->role=='A')
                                     <span class='changeroom'><a href="settings/assignroom/<?php echo $userdoctordetail->id; ?>">Change Room</a>
+                                    @endif
                                     <?php
                                     }else{
                                     ?>
+                                    @if($user->role=='A')
                                         <span class='allottedroom'>Not Allowted <a href="settings/assignroom/<?php echo $userdoctordetail->id; ?>">Allowted Room</a></span>
+                                    @endif   
                                     <?php
 
                                     }
