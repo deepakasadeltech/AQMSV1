@@ -665,10 +665,16 @@ td.enabled{cursor:default}
 
 ul.ttissuedetails{list-style: none; margin: 0px; padding: 0px;}
 ul.ttissuedetails li{display:inline-block; font-size: 12px; margin: 0px 2px; line-height: normal;}
-ul.ttissuedetails li span{font-size: 1.8rem; margin: 0px; line-height: normal;}
+ul.ttissuedetails li span{font-size: 1.4rem; margin: 0px; line-height: normal;}
 table.tablemodify thead th, table.tablemodify tbody td{text-align: center;}
 table.tablemodify thead th:first-child{width:10px;}
 table.tablemodify thead th{width:12%}
+.regboxx{width:100%; margin: 0px; padding: 0px; float: left;}
+.regboxx span{ display: inline-block; float:left;}
+.regboxx span input[type=text]:disabled{border-bottom: 1px solid rgba(0,0,0,.26);}
+.regboxx span:first-child{width:98px;}
+.regboxx span:last-child{width:80%;}
+
 
 
 @media only screen and (max-width:1024px) {

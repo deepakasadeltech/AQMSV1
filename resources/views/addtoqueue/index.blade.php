@@ -3,8 +3,6 @@
 @section('title', trans('messages.issue').' '.trans('messages.display.token'))
 
 @section('css')
-<link href="{{ url('assets/keyboard/css/keyboard.css') }}" type="text/css" rel="stylesheet" >
-<link href="{{ url('assets/keyboard/css/jquery-ui.css') }}" type="text/css" rel="stylesheet" >
     <style>
         .btn-queue{padding:25px;font-size:47px;line-height:36px;height:auto;margin:10px;letter-spacing:0;text-transform:none}
     </style>
@@ -23,17 +21,14 @@
                 <span id="gtime"> <?php date_default_timezone_set('Asia/Calcutta');$h = date('H'); $a = $h >= 12 ? 'PM' : 'AM';
              echo $timestamp = date('h:i:s ').$a; ?> </span> </div>
                 <div class="queue_time"><span>Click on Department to get token Number <br> टोकन नंबर पाने के लिए विभाग पर क्लिक करें</span> <span style=display:none;></span><span style=display:none;></span></div>
-               <!-- @foreach($getdepartmentbydoctors as $getdepartmentbydoctor)  @endforeach-->
                 <div class="boxdept" id="token_section">
-                @foreach($departments as $department)
-              @if( $department->is_uhid_required == 1)
-     <a style="margin-bottom:10px;margin-right:5px;text-transform:uppercase" class="waves-effect waves-light btn modal-trigger" href="#modal2_{{ $department->id }}">{{ $department->name }} <sup style="color:#890202; font-size:15px">*</sup></a>
-     @else
-     <button style="margin-bottom:10px;margin-right:5px;text-transform:uppercase" class="btn waves-effect waves-light csfloat" onclick="queue_dept({{ $department->id }}); this.style.visibility='hidden'; this.disable=true;" style="text-transform:none">{{ $department->name }} </button>
-     @endif
 
-             
-                 @endforeach
+                @foreach($departments as $department)
+              
+     <a  style="margin-bottom:10px;margin-right:5px;text-transform:uppercase" class="waves-effect waves-light btn modal-trigger" href="#modal2_{{ $department->id }}">{{ $department->name }} <sup style="color:#890202; font-size:15px">*</sup></a>
+    
+
+               @endforeach
                  </div>
                 </div>
                 </div>
@@ -42,14 +37,22 @@
 <div id="modal2_{{ $department->id }}" class="modal">
 <div class="modal-content">
 <div class="customform">
-<h4>{{ $department->name }} <span id="changelg" class="chooselang"> <label> <input name="langk" type="radio" value="hindi"  />
-        <span>हिंदी</span> </label> <label> <input name="langk" type="radio" value="bengali-qwerty-1" checked  /> <span>ENGLISH</span>
-      </label></span> </h4>
+<h4>{{ $department->name }}</h4>
 <form id="dep_isuuetkn2_{{ $department->id }}" name="getValueform2_{{ $department->id }}" action="/" method="GET">
 <div class = "row">
+@if( $department->is_uhid_required == 1)
 <div class="input-field col s12">      
 <label>Enter Valid UHID :</label>
 <input autocomplete="off" class="uhid_{{ $department->id }} keyboard" style="color:#777;" name="uhid" type="text" placeholder="UHID" value=""  />          
+</div> @endif
+
+<div class="input-field col s12">      
+<div class="regboxx">
+<span><input type="text" value="{{ $department->regcode }}<?php echo date('m').substr(date('Y'),2); ?>" readonly disabled  /></span>
+<span>
+<label>Enter Your Number :</label>
+<input autocomplete="off" class="registration_{{ $department->id }} regvalues" style="color:#777;" name="registration" type="text" placeholder="" value="" /></span> 
+</div>         
 </div>
 
 <div class="col s12" style="display:none;">
@@ -75,7 +78,7 @@
 <ul>
 
 <li><a href="javascript:void(0)" class="modal-close waves-light btn red csfloat">{{ trans('messages.call.cancel') }}</a></li>
-<li>  <button class="btn waves-effect waves-light csfloat" onclick="queue_dept({{ $department->id }}); this.style.visibility='hidden'; this.disable=true;" style="text-transform:none">{{ trans('messages.call.token_issue') }}<i class="mdi-navigation-arrow-forward right"></i>
+<li> <button class="btn waves-effect waves-light csfloat subbutton" onclick="queue_dept({{ $department->id }}); this.style.visibility='hidden'; this.disable=true;" style="text-transform:none">{{ trans('messages.call.token_issue') }}<i class="mdi-navigation-arrow-forward right"></i>
 </button></li>
 </ul>
 </div>
@@ -100,7 +103,7 @@
 <div id="printarea" style="background:#f2f2f2; -webkit-print-color-adjust:exact; font-family: 'Open Sans', sans-serif; line-height:1.2;  position:relative;">
           <!------------------>     
           @if(session()->get('uhid') != '')
-			<span style="position:absolute; top:0px; right:0px; font-size:10px; color:black;">
+			<span style="position:absolute; top:0px; right:0px; font-size:10px; color:black; display:none;">
                @if(session()->get('priority') == '1') Y @else  N  @endif
                </span>@else @endif
    
@@ -109,13 +112,19 @@
    <h1 style="display:inline-table; margin:0px;">
    <span style="display:block; text-transform:uppercase; font-size:18px;">{{str_limit( $settings->name)}}</span></h1></td></tr>
    
-   <tr><td colspan="2" style="text-align:center; padding:5px 0;"><span style="display:inline-table; font-weight:800; border:2px dotted #000; color:#000; padding:4px; text-transform:uppercase; font-size:25px;">टोकन संख्या : {{ session()->get('number') }}</span></td></tr>
+   <tr><td colspan="2" style="text-align:center; padding:5px 0;"><span style="display:inline-table; font-weight:800; border:2px dotted #000; color:#000; padding:4px; text-transform:uppercase; font-size:25px;">टोकन संख्या : {{ session()->get('number') }}</span>
+
+   <span style="display:block; font-weight:800; border-top:0px; border:2px dotted #000; color:#000; padding:4px; text-transform:uppercase; font-size:12px;">पंजीकरण संख्या : {{ session()->get('registration_no') }}</span>
+
+  </td></tr>
+
+  
    
    <tr><td colspan="2" style="padding:0px 3px; font-size:12px;" >
    <table style="width:100%; border:none; margin:0px; padding:0px; text-transform:uppercase; border-collapse:collapse;">
    <tr> <td style="width:70%; padding:4px; border:1px solid #ccc;">Department Name (विभाग<br> का नाम) <span style="float:right;">:</span></td> <td style="width:30%; padding:4px; border:1px solid #ccc;">{{ session()->get('department_name') }}</td> </tr>
     @if(session()->get('uhid') != '')
-   <tr> <td style="padding:4px; border:1px solid #ccc;">UHID No. (यूएचआईडी संख्या) <span style="float:right;">:</span></td>  <td style="padding:4px; border:1px solid #ccc;">{{ session()->get('uhid') }}</td> </tr>
+   <tr style="display:none;"> <td style="padding:4px; border:1px solid #ccc;">UHID No. (यूएचआईडी संख्या) <span style="float:right;">:</span></td>  <td style="padding:4px; border:1px solid #ccc;">{{ session()->get('uhid') }}</td> </tr>
    @else  @endif
 
    <tr> <td style="padding:4px; border:1px solid #ccc;">Patients in queue (कुल व्यक्ति प्रतीक्षा कर रहे हैं) <span style="float:right;">:</span></td>  <td style="padding:8px; border:1px solid #ccc;">{{ session()->get('total')-1 }}</td> </tr>
@@ -145,42 +154,9 @@
 @endsection
 
 @section('script')
-<script src="{{ url('assets/js/click_security.js') }}" type="text/javascript" ></script>
-<script src="{{ url('assets/keyboard/js/jquery.keyboard.js') }}" type="text/javascript" ></script>
-<script src="{{ url('assets/keyboard/js/jquery.mousewheel.js') }}" type="text/javascript" ></script>
-<script src="{{ url('assets/keyboard/js/jquery.keyboard.extension-typing.js') }}" type="text/javascript" ></script>
-<script src="{{ url('assets/keyboard/js/jquery.keyboard.extension-autocomplete.js') }}" type="text/javascript" ></script>
-<script src="{{ url('assets/keyboard/js/bengali.js') }}" type="text/javascript"></script>
-<script src="{{ url('assets/keyboard/js/hindi.js') }}" type="text/javascript"></script>
+<!--<script src="{{ url('assets/js/click_security.js') }}" type="text/javascript" ></script>-->
 <script type="text/javascript">
 //---------------------------------
-
-$(function () {
-   
-
-$('.keyboard').keyboard()
-.addTyping({
-showTyping: true,
-delay: 50
-});
-
-
-$('#changelg label input').on('change', function() {
-   //alert($('input[name="langk"]:checked').val()); 
-   var layout = $('input[name="langk"]:checked').val();
-$('.keyboard').each(function(){
-    var kb = $(this).data('keyboard');
-    kb.options.layout = layout;
-    if (kb.$keyboard.length) {
-        kb.reveal(true);
-    }
-});
-
-}).change(); 
-
-
-
-}); 
 //-----------------------
 
 
@@ -197,10 +173,11 @@ $('.keyboard').each(function(){
         function queue_dept(value) {
            // $('body').removeClass('loaded');
 		   var uhid = $('.uhid_'+value).val();
+           var registration = $('.registration_'+value).val();
 			var priority = $('.priority_'+value+':checked').val();
 			//alert(uhid + '---' + priority); return false;
             var myForm2 = '<form id="hidfrm2" action="{{ route('post_add_to_queue') }}" method="post">{{ csrf_field() }}<input type="hidden" name="department" value="'+value+'">'+
-  '<input type="text" name="uhid" value="'+ uhid +'">'+
+  '<input type="text" name="uhid" value="'+ uhid +'">'+'<input type="text" name="registration" value="'+ registration +'">'+
   '<input type="text" name="priority" value="'+ priority +'">'+'</form>';
             $('body').append(myForm2);
             myForm2 = $('#hidfrm2');
@@ -224,6 +201,26 @@ $('.keyboard').each(function(){
            // refreshtoken();
            window.location.reload();
         }, 300000);
+
+//-------------------------------------------
+
+
+
+$(document).ready(function(){
+
+    $('.subbutton').attr('disabled',true);
+    $('.regvalues').keyup(function(){
+        if($(this).val().length !=0 && $(this).val().length >=5 && $(this).val().length < 6 ){
+            $('.subbutton').attr('disabled',false);
+        }else{
+            $('.subbutton').attr('disabled',true);
+        }
+    })
+     
+})
+
+
+        
      
     </script>
 @endsection

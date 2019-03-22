@@ -71,11 +71,11 @@ class AddToQueueRepository
                     ->count();
     }
 	
-	public function isTokenExist($pid, $department_id, $token)
+	public function isTokenExist($pid, $department_id, $token, $regnumber)
     {
         return Queue::where('pid', $pid)
                     ->where('department_id', $department_id)
-					->where('number', $token)
+                    ->where('number', $token)
 					->where('called', 0)
                     ->where('created_at', '>', Carbon::now()->format('Y-m-d 00:00:00'))
                     ->count();

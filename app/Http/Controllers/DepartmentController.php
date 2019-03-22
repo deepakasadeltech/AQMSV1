@@ -47,6 +47,7 @@ class DepartmentController extends Controller
         $this->validate($request, [
 			'pid' => 'required',
             'name' => 'required',
+            'regcode' => 'required',
             'start' =>'required|numeric',
 			'is_uhid_required' => 'required',
         ]);
@@ -75,11 +76,13 @@ class DepartmentController extends Controller
         $this->validate($request, [
 			'pid' => 'required',
             'name' => 'required',
+            'regcode' => 'required',
             'start' =>'required|numeric',
 			'is_uhid_required' => 'required',
         ]);
 
         $department->name = $request->name;
+        $department->regcode = $request->regcode;
 		$department->pid = $request->pid;
         $department->letter = $request->letter;
         $department->start = $request->start;

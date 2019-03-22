@@ -61,6 +61,10 @@ class DashboardController extends Controller
 			'get_all_department_total_queue_in_today' => $this->setting->getAllDepartmentTotalQueueInToday(),
 			'get_all_department_total_called_in_today' => $this->setting->getAllDepartmentTotalCalledInToday(),
 
+			'getTodayAvgConsultingTime' => $this->setting->getTodayAvgConsultingTime(),
+			'getTodayAvgWaitingTime' => $this->setting->getTodayAvgWaitingTime(),
+			'getTodaytpatienttoDoctor' => $this->setting->getTodaytpatienttoDoctor(),
+
 		
 
 

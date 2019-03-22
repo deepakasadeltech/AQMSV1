@@ -22,8 +22,29 @@ class DashbordRepository
 
     public function getTodayQueue()
     {
-        return Queue::whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])
-                    ->count();
+        return Queue::with('call')->whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])
+                    ->get();
+
+    }
+
+    public function getTodayAvgWaitingTime()
+    {
+        return Queue::with('call')->whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])->where('called', 1)
+                    ->get();
+
+    }
+
+    public function getTodaytpatienttoDoctor()
+    {
+        return Call::whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])
+                    ->get();
+
+    }
+
+    public function getTodayAvgConsultingTime()
+    {
+        return Call::whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])->where('doctor_work_end', 1)->where('doctor_work_start', 1)
+                    ->get();
 
     }
 
@@ -225,7 +246,7 @@ class DashbordRepository
     }
     public function getAllDepartmentTotalCalledInToday()
     {
-        return Queue::whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])->where('called', 1)->get();
+        return Call::whereBetween('created_at', [Carbon::now()->format('Y-m-d').' 00:00:00', Carbon::now()->format('Y-m-d').' 23:59:59'])->where('doctor_work_start', 0)->get();
 
     }
 

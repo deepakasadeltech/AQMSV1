@@ -30,7 +30,34 @@
                         <div class="card hoverable">
                             <div class="card-content light-blue darken-2 white-text">
                                 <p class="card-stats-title truncate"><i class="mdi-social-group-add"></i> {{ trans('messages.today_queue') }}</p>
-                                <h4 class="card-stats-number">{{ $today_queue }}</h4>
+                                <h4 class="card-stats-number">
+                                <?php $today_total_patients_in_queue = '0'; $today_total_patients_called = '0'; $today_total_patients_in_waiting = '0'; $today_total_patients_to_doctor = '0' ?>
+                               @foreach($today_queue as $quedetail)
+
+                                @php( $today_total_patients_in_queue += count($quedetail->number) )
+
+                                @if($quedetail->called==0)
+                                @php( $today_total_patients_in_waiting += count($quedetail->number) )
+                                @endif
+                                
+                                @if($quedetail->called==1)
+                                @php( $today_total_patients_called += count($quedetail->number) )
+                                @endif  
+                                
+                               @endforeach
+
+                            
+                              
+                              
+                                <ul class="ttissuedetails">
+                               <li>Total : <span>{{$today_total_patients_in_queue}}</span></li>
+                               <li>Waiting : <span>{{$today_total_patients_in_waiting}}</span></li>
+                               <li>Missed : <span>{{$today_total_patients_called-count($getTodayAvgConsultingTime)}}</span></li>
+                              
+                               
+                             </ul> 
+
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action light-blue darken-4">
@@ -43,13 +70,37 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content green lighten-1 white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-communication-call-missed"></i> {{ trans('messages.today_missed') }}</p>
-                                <h4 class="card-stats-number">{{ $missed }}</h4>
+                                <p class="card-stats-title truncate"><i class="mdi-communication-call-missed"></i> Toady Avg. Waiting Time</p>
+                                <h4 class="card-stats-number">
+
+                                <?php $tavg_start_w_time = '0'; $tavg_end_w_time = '0'; $tt_patients_w = '0'; $tt_avg_time_w='0'; $tttoken_w='0'  ?>
+                                @foreach($getTodayAvgWaitingTime as $awaitingTime)
+                                   
+                                @php( $tavg_end_w_time += strtotime($awaitingTime->updated_at) )
+                                @php( $tavg_start_w_time += strtotime($awaitingTime->created_at))
+                                @php( $tt_patients_w += count($awaitingTime->number))
+                                @endforeach
+                             
+                                <?php 
+                                 if($tt_patients_w > 0){
+                                    $tttoken_w = $tt_patients_w;
+                                    //echo $tttoken.'<br>';
+                                   }else{
+                                    $tttoken_w  = 1;
+                                   }
+                                   $tt_avg_time_w = ($tavg_end_w_time-$tavg_start_w_time)/$tttoken_w;
+                                  // echo $tt_avg_time_w;
+                                   
+                                 echo gmdate("H:i:s", $tt_avg_time_w).'<sub style="font-size:12px;">&nbsp; Hrs / Patient</sub>'; 
+                                   
+                                    ?>
+                                
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action green darken-2">
                                 <div class="center-align">
-                                    <a href="{{ route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'missed']) }}" style="text-transform:none;color:#fff">{{ trans('messages.more_info') }} <i class="mdi-navigation-arrow-forward"></i></a>
+                    <a href="javascript:void(0)" style="text-transform:none;color:#fff">&nbsp;</a>
                                 </div>
                             </div>
                         </div>
@@ -57,13 +108,35 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content blue-grey white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-action-trending-up"></i> {{ trans('messages.today_served') }}</p>
-                                <h4 class="card-stats-number">{{ $served }}</h4>
+                                <p class="card-stats-title truncate"><i class="mdi-action-trending-up"></i> Today Avg. Consulting Time</p>
+                                <h4 class="card-stats-number">
+                                <?php $tavg_start_time = '0'; $tavg_end_time = '0'; $tt_patients = '0'; $tt_avg_time='0';  ?>
+                                @foreach($getTodayAvgConsultingTime as $aconsultingTime)
+                                   
+                                @php( $tavg_end_time += strtotime($aconsultingTime->doctor_work_end_date) )
+                                @php( $tavg_start_time += strtotime($aconsultingTime->doctor_work_start_date))
+                                @php( $tt_patients += count($aconsultingTime->number))
+                                @endforeach
+                               
+                                <?php 
+                                 if($tt_patients > 0){
+                                    $tttoken = $tt_patients;
+                                    //echo $tttoken.'<br>';
+                                   }else{
+                                    $tttoken  = 1;
+                                   }
+                                   $tt_avg_time = ($tavg_end_time-$tavg_start_time)/$tttoken;
+                                   
+                                 echo gmdate("H:i:s", $tt_avg_time).'<sub style="font-size:12px;">&nbsp; Hrs / Patient</sub>'; 
+                                   
+                                    ?>
+                                
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action blue-grey darken-2">
                                 <div class="center-align">
-                                    <a href="{{ route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'all']) }}" style="text-transform:none;color:#fff">{{ trans('messages.more_info') }} <i class="mdi-navigation-arrow-forward"></i></a>
+                        <a href="javascript:void(0);" style="text-transform:none;color:#fff">&nbsp; </a>
                                 </div>
                             </div>
                         </div>
@@ -71,13 +144,13 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content orange darken-2 white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-image-timer"></i> {{ trans('messages.over_time') }}</p>
-                                <h4 class="card-stats-number">{{ $overtime }}</h4>
+                                <p class="card-stats-title truncate"><i class="mdi-image-timer"></i> Today Total Consultant(Seen)</p>
+                                <h4 class="card-stats-number">{{ count($getTodayAvgConsultingTime) }}</h4>
                                 </p>
                             </div>
                             <div class="card-action orange darken-4">
                                 <div class="center-align">
-                                    <a href="{{ route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'overtime']) }}" style="text-transform:none;color:#fff">{{ trans('messages.more_info') }} <i class="mdi-navigation-arrow-forward"></i></a>
+                                    <a href="javascript:void(0);" style="text-transform:none;color:#fff">&nbsp;</a>
                                 </div>
                             </div>
                         </div>
@@ -345,6 +418,7 @@
                         <thead>
                             <tr>
                                 <th style="width:40px">#</th>
+								<th>{{ trans('messages.name') }}</th>
                                 <th>{{ trans('messages.users.parent_department') }}</th>
                                 <th>{{ trans('messages.users.department') }}</th>
                                 <th>{{ trans('messages.users.token_number') }}</th>
@@ -355,6 +429,11 @@
                         @foreach($get_all_department_total_called_in_today as $c)
                            <tr>
                            <td>{{ $loop->iteration }}</td>
+						   <td>@foreach($users as $uc)
+                           @if( $c->counter_id == $uc->counter_id )
+                           {{$uc->name}}
+                           @endif
+                           @endforeach</td>
                            <td>@foreach($pardepartments as $pardepartment)
                                     @if( $c->department->pid == $pardepartment->id )
                                     {{ $pardepartment->name }} @else @endif
@@ -362,8 +441,8 @@
                            <td>{{$c->department->name}}</td>
                            <td>{{$c->department->letter}}{{$c->number}}</td>
                            <td>
-                           @foreach($users as $uc)
-                           @if( $c->department->id == $uc->department_id )
+                          @foreach($users as $uc)
+                           @if( $c->counter_id == $uc->counter_id )
                            {{$uc->counter->name}}
                            @endif
                            @endforeach
@@ -912,31 +991,31 @@
                       }
                     ]
                 };
-
+          
                 var queueDetailsChartData = [
                   {
-                      value: "{{ $today_queue }}",
+                      value: "{{ $today_total_patients_in_queue }}",
                       color: "#00c0ef",
                       highlight: "#00c0ef",
-                      label: "In Queue"
+                      label: "Token Issued"
                   },
                   {
-                      value: "{{ $missed }}",
+                      value: "{{ $today_total_patients_in_waiting }}",
                       color: "#00a65a",
                       highlight: "#00a65a",
-                      label: "Missed"
+                      label: "Waiting Patient"
                   },
                   {
-                      value: "{{ $served }}",
+                      value: "{{ $today_total_patients_called-count($getTodayAvgConsultingTime) }}",
                       color: "#f39c12",
                       highlight: "#f39c12",
-                      label: "Served"
+                      label: "Missed Patients"
                   },
                   {
-                      value: "{{ $overtime }}",
+                      value: "{{ count($getTodayAvgConsultingTime) }}",
                       color: "#dd4b39",
                       highlight: "#dd4b39",
-                      label: "Overtime"
+                      label: "Consultant"
                   }
                 ];
 

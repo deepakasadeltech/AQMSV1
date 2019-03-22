@@ -84,7 +84,9 @@
                                     }
                                     ?>
                                     </td>
-                                    <td class="caction">@if($userdoctordetail->user_status == 1) <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small green">Active</button></a> @else <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small pink">InActive</button></a> @endif</td>
+                                    <td class="caction">@if($userdoctordetail->user_status == 1) 
+                                    <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small green">Active</button></a> @else <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small pink">InActive</button></a>
+                                     @endif</td>
 
                                     <td>{{ $userdoctordetail->role_text }}</td>
                                     @if($userdoctordetail->id==$user->id)

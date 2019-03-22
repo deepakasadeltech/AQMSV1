@@ -82,7 +82,9 @@
                                     }
                                     ?>
                                     </td>
-                                    <td class="caction"><?php if($userdoctordetail->user_status == 1): ?> <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small green">Active</button></a> <?php else: ?> <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small pink">InActive</button></a> <?php endif; ?></td>
+                                    <td class="caction"><?php if($userdoctordetail->user_status == 1): ?> 
+                                    <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small green">Active</button></a> <?php else: ?> <a href="users/updateStatus/<?php echo $userdoctordetail->id; ?>"><button class="btn waves-effect waves-light btn-small pink">InActive</button></a>
+                                     <?php endif; ?></td>
 
                                     <td><?php echo e($userdoctordetail->role_text); ?></td>
                                     <?php if($userdoctordetail->id==$user->id): ?>

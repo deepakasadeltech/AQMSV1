@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Queue extends Model
 {
-    protected $fillable = ['pid', 'department_id', 'number', 'called', 'uhid', 'priority'];
+    protected $fillable = ['pid', 'department_id', 'number','regnumber', 'called', 'uhid', 'priority'];
 
     public function call()
 	{

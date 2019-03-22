@@ -28,7 +28,34 @@
                         <div class="card hoverable">
                             <div class="card-content light-blue darken-2 white-text">
                                 <p class="card-stats-title truncate"><i class="mdi-social-group-add"></i> <?php echo e(trans('messages.today_queue')); ?></p>
-                                <h4 class="card-stats-number"><?php echo e($today_queue); ?></h4>
+                                <h4 class="card-stats-number">
+                                <?php $today_total_patients_in_queue = '0'; $today_total_patients_called = '0'; $today_total_patients_in_waiting = '0'; $today_total_patients_to_doctor = '0' ?>
+                               <?php $__currentLoopData = $today_queue; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $quedetail): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+
+                                <?php ( $today_total_patients_in_queue += count($quedetail->number) ); ?>
+
+                                <?php if($quedetail->called==0): ?>
+                                <?php ( $today_total_patients_in_waiting += count($quedetail->number) ); ?>
+                                <?php endif; ?>
+                                
+                                <?php if($quedetail->called==1): ?>
+                                <?php ( $today_total_patients_called += count($quedetail->number) ); ?>
+                                <?php endif; ?>  
+                                
+                               <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+
+                            
+                              
+                              
+                                <ul class="ttissuedetails">
+                               <li>Total : <span><?php echo e($today_total_patients_in_queue); ?></span></li>
+                               <li>Waiting : <span><?php echo e($today_total_patients_in_waiting); ?></span></li>
+                               <li>Missed : <span><?php echo e($today_total_patients_called-count($getTodayAvgConsultingTime)); ?></span></li>
+                              
+                               
+                             </ul> 
+
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action light-blue darken-4">
@@ -41,13 +68,37 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content green lighten-1 white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-communication-call-missed"></i> <?php echo e(trans('messages.today_missed')); ?></p>
-                                <h4 class="card-stats-number"><?php echo e($missed); ?></h4>
+                                <p class="card-stats-title truncate"><i class="mdi-communication-call-missed"></i> Toady Avg. Waiting Time</p>
+                                <h4 class="card-stats-number">
+
+                                <?php $tavg_start_w_time = '0'; $tavg_end_w_time = '0'; $tt_patients_w = '0'; $tt_avg_time_w='0'; $tttoken_w='0'  ?>
+                                <?php $__currentLoopData = $getTodayAvgWaitingTime; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $awaitingTime): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                                   
+                                <?php ( $tavg_end_w_time += strtotime($awaitingTime->updated_at) ); ?>
+                                <?php ( $tavg_start_w_time += strtotime($awaitingTime->created_at)); ?>
+                                <?php ( $tt_patients_w += count($awaitingTime->number)); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+                             
+                                <?php 
+                                 if($tt_patients_w > 0){
+                                    $tttoken_w = $tt_patients_w;
+                                    //echo $tttoken.'<br>';
+                                   }else{
+                                    $tttoken_w  = 1;
+                                   }
+                                   $tt_avg_time_w = ($tavg_end_w_time-$tavg_start_w_time)/$tttoken_w;
+                                  // echo $tt_avg_time_w;
+                                   
+                                 echo gmdate("H:i:s", $tt_avg_time_w).'<sub style="font-size:12px;">&nbsp; Hrs / Patient</sub>'; 
+                                   
+                                    ?>
+                                
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action green darken-2">
                                 <div class="center-align">
-                                    <a href="<?php echo e(route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'missed'])); ?>" style="text-transform:none;color:#fff"><?php echo e(trans('messages.more_info')); ?> <i class="mdi-navigation-arrow-forward"></i></a>
+                    <a href="javascript:void(0)" style="text-transform:none;color:#fff">&nbsp;</a>
                                 </div>
                             </div>
                         </div>
@@ -55,13 +106,35 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content blue-grey white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-action-trending-up"></i> <?php echo e(trans('messages.today_served')); ?></p>
-                                <h4 class="card-stats-number"><?php echo e($served); ?></h4>
+                                <p class="card-stats-title truncate"><i class="mdi-action-trending-up"></i> Today Avg. Consulting Time</p>
+                                <h4 class="card-stats-number">
+                                <?php $tavg_start_time = '0'; $tavg_end_time = '0'; $tt_patients = '0'; $tt_avg_time='0';  ?>
+                                <?php $__currentLoopData = $getTodayAvgConsultingTime; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $aconsultingTime): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                                   
+                                <?php ( $tavg_end_time += strtotime($aconsultingTime->doctor_work_end_date) ); ?>
+                                <?php ( $tavg_start_time += strtotime($aconsultingTime->doctor_work_start_date)); ?>
+                                <?php ( $tt_patients += count($aconsultingTime->number)); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+                               
+                                <?php 
+                                 if($tt_patients > 0){
+                                    $tttoken = $tt_patients;
+                                    //echo $tttoken.'<br>';
+                                   }else{
+                                    $tttoken  = 1;
+                                   }
+                                   $tt_avg_time = ($tavg_end_time-$tavg_start_time)/$tttoken;
+                                   
+                                 echo gmdate("H:i:s", $tt_avg_time).'<sub style="font-size:12px;">&nbsp; Hrs / Patient</sub>'; 
+                                   
+                                    ?>
+                                
+                                </h4>
                                 </p>
                             </div>
                             <div class="card-action blue-grey darken-2">
                                 <div class="center-align">
-                                    <a href="<?php echo e(route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'all'])); ?>" style="text-transform:none;color:#fff"><?php echo e(trans('messages.more_info')); ?> <i class="mdi-navigation-arrow-forward"></i></a>
+                        <a href="javascript:void(0);" style="text-transform:none;color:#fff">&nbsp; </a>
                                 </div>
                             </div>
                         </div>
@@ -69,13 +142,13 @@
                     <div class="col s12 m6 l3">
                         <div class="card hoverable">
                             <div class="card-content orange darken-2 white-text">
-                                <p class="card-stats-title truncate"><i class="mdi-image-timer"></i> <?php echo e(trans('messages.over_time')); ?></p>
-                                <h4 class="card-stats-number"><?php echo e($overtime); ?></h4>
+                                <p class="card-stats-title truncate"><i class="mdi-image-timer"></i> Today Total Consultant(Seen)</p>
+                                <h4 class="card-stats-number"><?php echo e(count($getTodayAvgConsultingTime)); ?></h4>
                                 </p>
                             </div>
                             <div class="card-action orange darken-4">
                                 <div class="center-align">
-                                    <a href="<?php echo e(route('reports::missed_show', ['date' => \Carbon\Carbon::now()->format('d-m-Y'), 'user' => 'all', 'counter' => 'all', 'type' => 'overtime'])); ?>" style="text-transform:none;color:#fff"><?php echo e(trans('messages.more_info')); ?> <i class="mdi-navigation-arrow-forward"></i></a>
+                                    <a href="javascript:void(0);" style="text-transform:none;color:#fff">&nbsp;</a>
                                 </div>
                             </div>
                         </div>
@@ -343,6 +416,7 @@
                         <thead>
                             <tr>
                                 <th style="width:40px">#</th>
+								<th><?php echo e(trans('messages.name')); ?></th>
                                 <th><?php echo e(trans('messages.users.parent_department')); ?></th>
                                 <th><?php echo e(trans('messages.users.department')); ?></th>
                                 <th><?php echo e(trans('messages.users.token_number')); ?></th>
@@ -353,6 +427,12 @@
                         <?php $__currentLoopData = $get_all_department_total_called_in_today; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                            <tr>
                            <td><?php echo e($loop->iteration); ?></td>
+						   <td><?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uc): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                           <?php if( $c->counter_id == $uc->counter_id ): ?>
+                           <?php echo e($uc->name); ?>
+
+                           <?php endif; ?>
+                           <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?></td>
                            <td><?php $__currentLoopData = $pardepartments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pardepartment): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
                                     <?php if( $c->department->pid == $pardepartment->id ): ?>
                                     <?php echo e($pardepartment->name); ?> <?php else: ?> <?php endif; ?>
@@ -360,8 +440,8 @@
                            <td><?php echo e($c->department->name); ?></td>
                            <td><?php echo e($c->department->letter); ?><?php echo e($c->number); ?></td>
                            <td>
-                           <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uc): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
-                           <?php if( $c->department->id == $uc->department_id ): ?>
+                          <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uc): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                           <?php if( $c->counter_id == $uc->counter_id ): ?>
                            <?php echo e($uc->counter->name); ?>
 
                            <?php endif; ?>
@@ -914,31 +994,31 @@
                       }
                     ]
                 };
-
+          
                 var queueDetailsChartData = [
                   {
-                      value: "<?php echo e($today_queue); ?>",
+                      value: "<?php echo e($today_total_patients_in_queue); ?>",
                       color: "#00c0ef",
                       highlight: "#00c0ef",
-                      label: "In Queue"
+                      label: "Token Issued"
                   },
                   {
-                      value: "<?php echo e($missed); ?>",
+                      value: "<?php echo e($today_total_patients_in_waiting); ?>",
                       color: "#00a65a",
                       highlight: "#00a65a",
-                      label: "Missed"
+                      label: "Waiting Patient"
                   },
                   {
-                      value: "<?php echo e($served); ?>",
+                      value: "<?php echo e($today_total_patients_called-count($getTodayAvgConsultingTime)); ?>",
                       color: "#f39c12",
                       highlight: "#f39c12",
-                      label: "Served"
+                      label: "Missed Patients"
                   },
                   {
-                      value: "<?php echo e($overtime); ?>",
+                      value: "<?php echo e(count($getTodayAvgConsultingTime)); ?>",
                       color: "#dd4b39",
                       highlight: "#dd4b39",
-                      label: "Overtime"
+                      label: "Consultant"
                   }
                 ];
 

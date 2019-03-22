@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Department extends Model
 {
-    protected $fillable = ['name', 'letter', 'start', 'pid', 'is_uhid_required'];
+    protected $fillable = ['name', 'regcode', 'letter', 'start', 'pid', 'is_uhid_required'];
 
     public function queues()
 	{

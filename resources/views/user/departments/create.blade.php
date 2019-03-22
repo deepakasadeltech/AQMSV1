@@ -49,6 +49,17 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="regcode">Registration Code</label>
+                            <input id="regcode" type="text" name="regcode" placeholder="Registration Code" value="{{ old('regcode') }}" data-error=".regcode">
+                            <div class="regcode">
+                                @if($errors->has('regcode'))<div class="error">{{ $errors->first('regcode') }}</div>@endif
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="input-field col s12">
                             <label for="letter">{{ trans('messages.department.letter') }}</label>
@@ -102,6 +113,9 @@
         $("#add").validate({
             rules: {
                 name: {
+                    required: true
+                },
+                regcode: {
                     required: true
                 },
                 start: {

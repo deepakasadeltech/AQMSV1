@@ -31,6 +31,7 @@
                                 <th style="width:40px">#</th>
 								<th><?php echo e(trans('messages.mainapp.menu.parent_department')); ?></th>
                                 <th><?php echo e(trans('messages.name')); ?></th>
+                                <th>Registration Code</th>
                                 <th><?php echo e(trans('messages.department.letter')); ?></th>
                                 <th><?php echo e(trans('messages.department.start')); ?></th>
 								<th><?php echo e(trans('messages.mainapp.menu.uhid_required')); ?></th>
@@ -43,6 +44,7 @@
                                     <td><?php echo e($loop->iteration); ?></td>
                                     <td><?php echo e($department->pname); ?></td>
 									<td><?php echo e($department->name); ?></td>
+                                    <td><?php echo e($department->regcode); ?></td>
                                     <td><?php echo e($department->letter); ?></td>
                                     <td><?php echo e($department->start); ?></td>
 									<td><?php echo e(($department->is_uhid_required == 1) ? 'Yes' : 'No'); ?></td>

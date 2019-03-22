@@ -215,7 +215,7 @@
     <div class = "row">
     <div class="input-field col s12">      
       <label>Enter Valid UHID :</label>
-       <input class="uhid_{{ $department->id }}" name="uhid" type="text" placeholder="UHID" value=""  />          
+       <input autocomplete="off" class="uhid_{{ $department->id }}" name="uhid" type="text" placeholder="UHID" value=""  />          
     </div>
                
          <div class="col s12" style="display:none;">

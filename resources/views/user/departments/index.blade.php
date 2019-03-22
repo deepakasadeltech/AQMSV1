@@ -33,6 +33,7 @@
                                 <th style="width:40px">#</th>
 								<th>{{ trans('messages.mainapp.menu.parent_department') }}</th>
                                 <th>{{ trans('messages.name') }}</th>
+                                <th>Registration Code</th>
                                 <th>{{ trans('messages.department.letter') }}</th>
                                 <th>{{ trans('messages.department.start') }}</th>
 								<th>{{ trans('messages.mainapp.menu.uhid_required') }}</th>
@@ -45,6 +46,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $department->pname }}</td>
 									<td>{{ $department->name }}</td>
+                                    <td>{{ $department->regcode }}</td>
                                     <td>{{ $department->letter }}</td>
                                     <td>{{ $department->start }}</td>
 									<td>{{ ($department->is_uhid_required == 1) ? 'Yes' : 'No' }}</td>

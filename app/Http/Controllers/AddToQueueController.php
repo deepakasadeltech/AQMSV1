@@ -55,10 +55,10 @@ class AddToQueueController extends Controller
 
     public function postDept(Request $request)
     {
-		$department = Department::findOrFail($request->department);
+        $department = Department::findOrFail($request->department);
 		$request->session()->flash('printFlag', true);
 		$is_uhid_required = $this->isUhidRequired($department->id);
-		//var_dump($is_uhid_required);die;
+        //var_dump($is_uhid_required);die;
 		if($is_uhid_required){
 			$uhid = $request->uhid;
 			$is_uhid_exist = $this->isUHIDExist($uhid);
@@ -69,10 +69,11 @@ class AddToQueueController extends Controller
 			}
 		}
         
-
+        $todaydate = date('m').substr(date('Y'),2);
         $last_token = $this->add_to_queues->getLastToken($department);
-
+     
         if($last_token) {
+            //$regnumber = $last_token->regnumber;
 			$tokenNumber = ((int)$last_token->number)+1;
 			$istkenExist = $this->add_to_queues->isTokenExist($department->pid, $department->id, $tokenNumber);
 			if($istkenExist > 0){
@@ -83,6 +84,7 @@ class AddToQueueController extends Controller
             $queue = $department->queues()->create([
 				'pid' => $department->pid,
                 'number' => ((int)$last_token->number)+1,
+                'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
 				'uhid' => $request->uhid,
                 'priority' => $request->priority,
@@ -98,6 +100,7 @@ class AddToQueueController extends Controller
             $queue = $department->queues()->create([
 				'pid' => $department->pid,
                 'number' => $department->start,
+                'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
 				'uhid' => $request->uhid,
                 'priority' => $request->priority,
@@ -107,7 +110,8 @@ class AddToQueueController extends Controller
         $total = $this->add_to_queues->getCustomersWaiting($department);
 
         event(new \App\Events\TokenIssued());
-
+        
+        $request->session()->flash('registration_no',  $department->regcode.$todaydate.$request->registration);
         $request->session()->flash('department_name', $department->name);
         $request->session()->flash('number', ($department->letter!='')?$department->letter.''.$queue->number:$queue->number);
         $request->session()->flash('total', $total);
