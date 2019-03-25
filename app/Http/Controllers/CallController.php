@@ -83,15 +83,26 @@ class CallController extends Controller
 		$request->session()->flash('printFlag', true);
 		$is_uhid_required = $this->isUhidRequired($department->id);
 		if($is_uhid_required){
-			$uhid = $request->uhid;
+			$uhid = 123;
+			//$uhid = $request->uhid;
 			$is_uhid_exist = $this->isUHIDExist($uhid);
 			if(!$is_uhid_exist) {
 				$request->session()->flash('printFlag', false);
 				flash()->warning('Invalid UHID');
 				return redirect()->route('calls');
 			}
-		}
-		
+        }
+        
+		//------------
+        $todaydate = date('m').substr(date('Y'),2);
+        $dublicate = $department->regcode.$todaydate.$request->registration;
+        $get_Registration = $this->calls->getRegistNumber($dublicate);
+        if($get_Registration > 0){
+            $request->session()->flash('printFlag', false);
+            flash()->warning('This Registration Number All Ready Exist');
+            return redirect()->route('calls');
+        }
+      //--------------
         $last_token = $this->calls->getLastToken($department);
 
         if($last_token) {
@@ -101,12 +112,15 @@ class CallController extends Controller
 				$request->session()->flash('printFlag', false);
 				flash()->warning('Token already issued');
 				return redirect()->route('calls');
-			}
+            }
+            
             $queue = $department->queues()->create([
 				'pid' => $department->pid,
                 'number' => ((int)$last_token->number)+1,
+                'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
-				'uhid' => $request->uhid,
+                'uhid' => 123,
+				//'uhid' => $request->uhid,
                 'priority' => $request->priority,
             ]);
         } else {
@@ -120,8 +134,10 @@ class CallController extends Controller
             $queue = $department->queues()->create([
 				'pid' => $department->pid,
                 'number' => $department->start,
+                'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
-				'uhid' => $request->uhid,
+                'uhid' => 123,
+				//'uhid' => $request->uhid,
                 'priority' => $request->priority,
             ]);
         }
@@ -131,6 +147,7 @@ class CallController extends Controller
         event(new \App\Events\TokenIssued());
         $staffuser = User::find(Auth::user()->id);
         $stt = Setting::first();
+        $request->session()->flash('registration_no',  $department->regcode.$todaydate.$request->registration);
         $request->session()->flash('department_name', $department->name);
         $request->session()->flash('number', ($department->letter!='')?$department->letter.'-'.$queue->number:$queue->number);
         $request->session()->flash('total', $total);
@@ -160,7 +177,23 @@ class CallController extends Controller
 		$result = UhidMaster::where('uhid', $uhid)->count();
 		$flag = ($result > 0) ? true : false;
 		return $flag;
-	}
+    }
+    
+    public function getRegistration(Request $request)
+    { 
+        //$regist = $request->regist;
+		$regist = $request->registration;
+		$result = Queue::first();
+		$regResult = substr($result->regnumber, 6);
+		
+			if($regResult !== $regist){
+				$output = '<span class="plbox">Valid</span>';
+			}else{
+                $output = 'Invalid';
+            }
+		
+        return $output;
+    }
 	
 	
     public function recall(Request $request)

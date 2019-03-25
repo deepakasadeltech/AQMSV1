@@ -31,6 +31,7 @@ Route::group(['middleware' => 'install'], function() {
     Route::get('queue', ['as' => 'add_to_queue', 'uses' => 'AddToQueueController@index']);
     Route::post('queue', ['as' => 'post_add_to_queue', 'uses' => 'AddToQueueController@postDept']);
     Route::post('refreshToken', ['as' => 'refresh_token', 'uses' => 'AddToQueueController@refreshToken']);
+    Route::post('queue/getRegistration', ['as' => 'post_registration', 'uses' => 'AddToQueueController@getRegistration']);
 
     // Display
     Route::get('display', ['as' => 'display', 'uses' => 'DisplayController@index']);
@@ -56,7 +57,8 @@ Route::group(['middleware' => 'install'], function() {
         Route::post('calls', ['as' => 'post_call', 'uses' => 'CallController@newCall']);
         Route::post('calls/recall', ['as' => 'post_recall', 'uses' => 'CallController@recall']);
         Route::post('calls/dept/{department}', ['as' => 'post_dept', 'uses' => 'CallController@postDept']);
-		Route::post('calls/pdept', ['as' => 'post_pdept', 'uses' => 'CallController@postPdept']);
+        Route::post('calls/pdept', ['as' => 'post_pdept', 'uses' => 'CallController@postPdept']);
+        Route::post('calls/getRegistration', ['as' => 'post_registration', 'uses' => 'CallController@getRegistration']);
 		
 		//Export
 		Route::get('exports', ['as' => 'exports', 'uses' => 'ExportController@index']);

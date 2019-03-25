@@ -60,7 +60,8 @@ class AddToQueueController extends Controller
 		$is_uhid_required = $this->isUhidRequired($department->id);
         //var_dump($is_uhid_required);die;
 		if($is_uhid_required){
-			$uhid = $request->uhid;
+            $uhid = 123;
+			//$uhid = $request->uhid;
 			$is_uhid_exist = $this->isUHIDExist($uhid);
 			if(!$is_uhid_exist) {
 				$request->session()->flash('printFlag', false);
@@ -69,24 +70,38 @@ class AddToQueueController extends Controller
 			}
 		}
         
-        $todaydate = date('m').substr(date('Y'),2);
+        //---------
+        $todaydate = date('m').substr(date('Y'),2); 
+        $dublicate = $department->regcode.$todaydate.$request->registration;   
+        $get_Registration = $this->add_to_queues->getRegistNumber($dublicate);
+        
+            if($get_Registration > 0){
+                $request->session()->flash('printFlag', false);
+                flash()->warning('This Registration Number All Ready Exist');
+                return redirect()->route('add_to_queue');
+            }
+        //------------
+        
         $last_token = $this->add_to_queues->getLastToken($department);
-     
+
+        
         if($last_token) {
-            //$regnumber = $last_token->regnumber;
 			$tokenNumber = ((int)$last_token->number)+1;
 			$istkenExist = $this->add_to_queues->isTokenExist($department->pid, $department->id, $tokenNumber);
 			if($istkenExist > 0){
 				$request->session()->flash('printFlag', false);
 				flash()->warning('Token already issued');
 				return redirect()->route('add_to_queue');
-			}
+            }
+         
+        
             $queue = $department->queues()->create([
 				'pid' => $department->pid,
                 'number' => ((int)$last_token->number)+1,
                 'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
-				'uhid' => $request->uhid,
+                'uhid' => 123,
+				//'uhid' => $request->uhid,
                 'priority' => $request->priority,
             ]);
         } else {
@@ -102,7 +117,8 @@ class AddToQueueController extends Controller
                 'number' => $department->start,
                 'regnumber' => $department->regcode.$todaydate.$request->registration,
                 'called' => 0,
-				'uhid' => $request->uhid,
+                'uhid' => 123,
+				//'uhid' => $request->uhid,
                 'priority' => $request->priority,
             ]);
         }
@@ -138,5 +154,24 @@ class AddToQueueController extends Controller
 		$result = UhidMaster::where('uhid', $uhid)->count();
 		$flag = ($result > 0) ? true : false;
 		return $flag;
-	}
+    }
+
+    public function getRegistration(Request $request)
+    { 
+        //$regist = $request->regist;
+		$regist = $request->registration;
+		$result = Queue::first();
+		$regResult = substr($result->regnumber, 6);
+		
+			if($regResult !== $regist){
+				$output = '<span class="plbox">Valid</span>';
+			}else{
+                $output = 'Invalid';
+            }
+		
+        return $output;
+    }
+    
+
+
 }

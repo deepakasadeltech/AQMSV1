@@ -60,6 +60,13 @@ class CallRepository
                     ->first();
     }
 
+    public function getRegistNumber($rigistnum)
+    {
+                return Queue::where('regnumber', $rigistnum)
+                //->where('created_at', '>', Carbon::now()->format('Y-m-d 00:00:00'))
+                ->count();          
+    }
+
     public function getCustomersWaiting(Department $department)
     {
         return $department->queues()

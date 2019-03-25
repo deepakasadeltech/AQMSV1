@@ -41,7 +41,7 @@
 <form id="dep_isuuetkn2_{{ $department->id }}" name="getValueform2_{{ $department->id }}" action="/" method="GET">
 <div class = "row">
 @if( $department->is_uhid_required == 1)
-<div class="input-field col s12">      
+<div class="input-field col s12" style="display:none;">      
 <label>Enter Valid UHID :</label>
 <input autocomplete="off" class="uhid_{{ $department->id }} keyboard" style="color:#777;" name="uhid" type="text" placeholder="UHID" value=""  />          
 </div> @endif
@@ -51,9 +51,15 @@
 <span><input type="text" value="{{ $department->regcode }}<?php echo date('m').substr(date('Y'),2); ?>" readonly disabled  /></span>
 <span>
 <label>Enter Your Number :</label>
-<input autocomplete="off" class="registration_{{ $department->id }} regvalues" style="color:#777;" name="registration" type="text" placeholder="" value="" /></span> 
+<input autocomplete="off" class="registration_{{ $department->id }} regvalues" style="color:#777;" name="registration" type="text" placeholder="" value="" onkeyup="getRegistration(this.value, {{ $department->id }});" /></span> 
 </div>         
 </div>
+
+<div class="col s12 checkregist">
+         <ul>
+         <li style="font-size:0.8rem">Valid: <span id="registlbl_{{ $department->id }}"></span></li>
+         </ul>
+          </div> 
 
 <div class="col s12" style="display:none;">
 <ul>
@@ -202,6 +208,31 @@
            window.location.reload();
         }, 300000);
 
+//----------------------------
+
+     //--------------------------------------
+     var timer = '';
+		function getRegistration(val, id)
+		{  
+			clearTimeout(timer);
+			timer = setTimeout(function() {
+					var data = 'registration='+val+'&_token={{ csrf_token() }}';
+					$.ajax({
+						type:"POST",
+						url:"{{ route('post_registration') }}",
+						data:data,
+						cache:false,
+						beforeSend: function(){
+							$('#registlbl_'+id).html('Validating...');	
+						},
+						success: function(result) {							
+							$('#registlbl_'+id).html(result);												
+						}
+					});
+			}, 1000);
+		}
+   
+
 //-------------------------------------------
 
 
@@ -217,7 +248,9 @@ $(document).ready(function(){
         }
     })
      
-})
+});
+
+//------------------------------------------
 
 
         

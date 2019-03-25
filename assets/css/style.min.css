@@ -674,6 +674,7 @@ table.tablemodify thead th{width:12%}
 .regboxx span input[type=text]:disabled{border-bottom: 1px solid rgba(0,0,0,.26);}
 .regboxx span:first-child{width:98px;}
 .regboxx span:last-child{width:80%;}
+.checkregist{display:none;}
 
 
 

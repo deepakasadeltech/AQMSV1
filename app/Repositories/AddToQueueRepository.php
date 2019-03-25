@@ -63,6 +63,14 @@ class AddToQueueRepository
                     ->first();
     }
 
+    public function getRegistNumber($rigistnum)
+    {
+                return Queue::where('regnumber', $rigistnum)
+                //->where('created_at', '>', Carbon::now()->format('Y-m-d 00:00:00'))
+                ->count();          
+    }
+    
+
     public function getCustomersWaiting(Department $department)
     {
         return $department->queues()
@@ -71,7 +79,7 @@ class AddToQueueRepository
                     ->count();
     }
 	
-	public function isTokenExist($pid, $department_id, $token, $regnumber)
+	public function isTokenExist($pid, $department_id, $token)
     {
         return Queue::where('pid', $pid)
                     ->where('department_id', $department_id)
@@ -80,4 +88,6 @@ class AddToQueueRepository
                     ->where('created_at', '>', Carbon::now()->format('Y-m-d 00:00:00'))
                     ->count();
     }
+
+    
 }
