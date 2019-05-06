@@ -1,3 +1,7 @@
+<?php
+$yourLicensecode = include_once('license.php');
+if( (strtotime($datefrom) <= strtotime(base64_decode($dateto))) && ($nMac == base64_decode($lMac)) ) { ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -84,3 +88,9 @@ function timestamp() {
         @include('common.messages')
     </body>
 </html>
+
+<?php }
+
+else{ include_once('license_expire.php'); }
+
+?>

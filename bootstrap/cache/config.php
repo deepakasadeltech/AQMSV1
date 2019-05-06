@@ -1,10 +1,14 @@
+<?php 
+$basicpath = 'D:\\Axamp\\htdocs\\aqmsv1ioncube';
+$basicurl = 'http://localhost/aqmsv1ioncube/Control Panel.{21EC2020-3AEA-1069-A2DD-08002B30309D}';
+ ?>
 <?php return array (
   'app' => 
   array (
     'name' => 'ASADELTECH',
     'env' => 'production',
     'debug' => true,
-    'url' => 'http://localhost/aqmsv1si',
+    'url' => $basicurl,
     'timezone' => 'Asia/Calcutta',
     'locale' => 'gb',
     'fallback_locale' => 'gb',
@@ -172,7 +176,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\framework/cache',
+        'path' => $basicpath.'\\storage\\framework/cache',
       ),
       'memcached' => 
       array (
@@ -222,7 +226,7 @@
       'sqlite' => 
       array (
         'driver' => 'sqlite',
-        'database' => 'aqmsv1_si',
+        'database' => 'aqmsv1_ioncube',
         'prefix' => '',
       ),
       'mysql' => 
@@ -230,9 +234,9 @@
         'driver' => 'mysql',
         'host' => 'localhost',
         'port' => '3306',
-        'database' => 'aqmsv1_si',
-        'username' => 'aqmsv1_si',
-        'password' => 'aqmsv1_si',
+        'database' => 'aqmsv1_ioncube',
+        'username' => 'aqmsv1_ioncube',
+        'password' => 'aqmsv1_ioncube',
         'charset' => 'utf8',
         'collation' => 'utf8_unicode_ci',
         'prefix' => '',
@@ -244,9 +248,9 @@
         'driver' => 'pgsql',
         'host' => 'localhost',
         'port' => '3306',
-        'database' => 'aqmsv1_si',
-        'username' => 'aqmsv1_si',
-        'password' => 'aqmsv1_si',
+        'database' => 'aqmsv1_ioncube',
+        'username' => 'aqmsv1_ioncube',
+        'password' => 'aqmsv1_ioncube',
         'charset' => 'utf8',
         'prefix' => '',
         'schema' => 'public',
@@ -275,13 +279,13 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\app',
-        'root' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\app',
+        'root' => $basicpath.'\\storage\\app',
+        'root' => $basicpath.'\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\app/public',
+        'root' => $basicpath.'\\storage\\app/public',
         'visibility' => 'public',
       ),
       's3' => 
@@ -403,7 +407,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\framework/sessions',
+    'files' => $basicpath.'\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -422,8 +426,8 @@
   array (
     'paths' => 
     array (
-      0 => 'D:\\Axamp\\htdocs\\aqmsv1si\\resources\\views',
+      0 => $basicpath.'\\resources\\views',
     ),
-    'compiled' => 'D:\\Axamp\\htdocs\\aqmsv1si\\storage\\framework\\views',
+    'compiled' => $basicpath.'\\storage\\framework\\views',
   ),
 );

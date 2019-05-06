@@ -12,8 +12,7 @@ class Counter extends Model
 	{
 		return $this->hasMany('App\Models\Call');
 	}
-
-	public function counter()
+   public function counter()
 	{
 		return $this->belongsTo('App\Models\Counter');
 	}
@@ -22,15 +21,8 @@ class Counter extends Model
 	{
 		return $this->belongsTo('App\Models\Department');
 	}
-
-	public function pdepartment()
+   public function pdepartment()
 	{
 		return $this->belongsTo('App\Models\ParentDepartment');
 	}
-
-	
-
-	
-
-
 }
